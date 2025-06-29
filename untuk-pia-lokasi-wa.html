@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Untuk Pia</title>
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #e3eafc, #ffffff);
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 40px;
+      color: #333;
+    }
+    h1 {
+      color: #6a5acd;
+      font-size: 32px;
+    }
+    p {
+      font-size: 18px;
+      margin: 20px;
+    }
+    button {
+      background-color: #6a5acd;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #location {
+      margin-top: 30px;
+      font-weight: bold;
+      color: #444;
+    }
+  </style>
+</head>
+<body>
+  <h1>Untuk Pia Dwi Astari</h1>
+  <p>“Jika kamu ingin, biarkan semesta tunjukkan di mana kamu sekarang...”</p>
+  <button onclick="getLocation()">Tunjukkan Di Mana Kamu Berada</button>
+
+  <div id="location"></div>
+
+  <script>
+    function getLocation() {
+      const loc = document.getElementById("location");
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(sendToWhatsApp, showError);
+      } else {
+        loc.innerHTML = "Peramban kamu tidak mendukung geolokasi.";
+      }
+    }
+
+    function sendToWhatsApp(position) {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+      const message = `Hai Diky, ini lokasiku sekarang: https://maps.google.com/?q=${latitude},${longitude}`;
+      const phoneNumber = "6285338240613"; // Nomor WA tujuan
+      const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+      document.getElementById("location").innerHTML = `Mengirim lokasimu ke Diky...`;
+      window.location.href = url;
+    }
+
+    function showError(error) {
+      switch(error.code) {
+        case error.PERMISSION_DENIED:
+          document.getElementById("location").innerHTML = "Kamu menolak membagikan lokasimu.";
+          break;
+        case error.POSITION_UNAVAILABLE:
+          document.getElementById("location").innerHTML = "Informasi lokasi tidak tersedia.";
+          break;
+        case error.TIMEOUT:
+          document.getElementById("location").innerHTML = "Permintaan lokasi kehabisan waktu.";
+          break;
+        default:
+          document.getElementById("location").innerHTML = "Terjadi kesalahan.";
+      }
+    }
+  </script>
+</body>
+</html>
